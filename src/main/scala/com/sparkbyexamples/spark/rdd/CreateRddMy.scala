@@ -6,7 +6,9 @@ import org.apache.spark.sql.SparkSession
 object CreateRddMy extends App with BaseResource {
   val spark: SparkSession = SparkSession.builder
     .master("local[3]")
-    .appName("SparkByExamples.com")
+    .appName("CreateRddMy")
+    .config("spark.eventLog.dir", "file:///Users/admin/data/spark/spark-logs")
+    .config("spark.eventLog.enabled", "true")
     .getOrCreate()
 
   val rdd = spark.sparkContext.parallelize(Seq(("Java", 20000), ("Python", 100000), ("Scala", 3000)))

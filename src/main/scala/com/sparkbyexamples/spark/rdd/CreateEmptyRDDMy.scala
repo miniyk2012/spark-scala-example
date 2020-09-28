@@ -13,7 +13,7 @@ object CreateEmptyRDDMy extends App with BaseResource {
   println(rdd)
   println(rddString)
   println("Num of Partitions: " + rdd.getNumPartitions)
-
+  println(resourceDirectory)
   rddString.saveAsTextFile(resourceDirectory + "store/emptyRddString")
 
   val rdd2 = spark.sparkContext.parallelize(Seq.empty[String])
@@ -21,6 +21,6 @@ object CreateEmptyRDDMy extends App with BaseResource {
   println("Num of Partitions: " + rdd2.getNumPartitions)
 
   // Pair RDD
-  
+
 
 }
