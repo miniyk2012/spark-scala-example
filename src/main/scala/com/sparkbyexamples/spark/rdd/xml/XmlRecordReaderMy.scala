@@ -10,7 +10,7 @@ import org.apache.spark.sql.SparkSession
 import scala.xml.XML
 
 
-object XmlRecordReader {
+object XmlRecordReaderMy  {
   def main(args: Array[String]): Unit = {
     val sparkSession = SparkSession.builder.appName("XmlRecordReader").master("local").getOrCreate
     sparkSession.sparkContext.setLogLevel("ERROR")
@@ -20,17 +20,16 @@ object XmlRecordReader {
     configuration.set("xmlinput.end", "</Rec>")
     configuration.set("mapreduce.input.fileinputformat.inputdir", "src/main/resources/records.xml")
     val javaPairRDD = javaSparkContext.newAPIHadoopRDD(configuration, classOf[XmlInputFormat], classOf[LongWritable], classOf[Text])
-    println(javaPairRDD.count())
+
     javaPairRDD.foreach(new VoidFunction[Tuple2[LongWritable, Text]]() {
       @throws[Exception]
       override def call(tuple: Tuple2[LongWritable, Text]): Unit = { // TODO Auto-generated method stub
         val xml = XML.loadString(tuple._2.toString)
-        val forecast = (xml \ "Name") text
-
+        val forecast = (xml \ "Name").toString
         println("forecast" + forecast)
 
       }
     })
   }
-}
 
+}
