@@ -21,7 +21,7 @@ object SQLContextExample extends App {
   df.printSchema()
 
   df.createOrReplaceTempView("TAB")
-  sqlContext.sql("select * from TAB")
+  sqlContext.sql("select RecordNumber from TAB")
     .show(false)
 
 }
