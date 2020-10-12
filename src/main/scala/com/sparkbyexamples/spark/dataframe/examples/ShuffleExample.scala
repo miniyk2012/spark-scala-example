@@ -9,6 +9,8 @@ object ShuffleExample extends App {
     .appName("SparkByExamples.com")
     .getOrCreate()
 
+  spark.sparkContext.setLogLevel("WARN")
+
   import spark.implicits._
 
   val simpleData = Seq(("James","Sales","NY",90000,34,10000),

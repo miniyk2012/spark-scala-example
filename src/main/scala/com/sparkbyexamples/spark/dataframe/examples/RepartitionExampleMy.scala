@@ -8,6 +8,7 @@ object RepartitionExampleMy extends App {
     .appName("SparkByExamples.com")
     //    .config("spark.default.parallelism", "500")
     .getOrCreate()
+  spark.sparkContext.setLogLevel("WARN")
 
   // spark.sqlContext.setConf("spark.default.parallelism", "500")
   //spark.conf.set("spark.default.parallelism", "500")
