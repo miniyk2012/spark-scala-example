@@ -1,6 +1,9 @@
 package com.javaexamples.sharedVariables.accumulators
 
+import java.math.BigInteger
+
 import com.holdenkarau.spark.testing.SharedSparkContext
+import com.javaexamples.sharedVariables.accumulators.CustomAccumulatorDemo.BigIntegerAccumulator
 import org.scalatest.{FunSuite, Matchers}
 
 class CustomAccumulatorDemoTest extends FunSuite
@@ -13,5 +16,17 @@ class CustomAccumulatorDemoTest extends FunSuite
 
     rdd.count should equal(list.length)
     assert(rdd.count === list.size)
+  }
+
+  test("test customer accumulator") {
+    val bigAcc = new BigIntegerAccumulator()
+    val list = Seq(1,2,3,4,5)
+    sc.register(bigAcc)
+    sc.parallelize(list).map(r=>{
+      bigAcc.add(new BigInteger("1"))
+      r
+    }).count()
+    println(s"bigAcc=${bigAcc.value()}")
+    assert(bigAcc.value.intValue === list.size)
   }
 }
