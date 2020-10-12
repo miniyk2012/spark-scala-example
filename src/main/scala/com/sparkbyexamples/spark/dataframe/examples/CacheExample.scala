@@ -6,12 +6,15 @@ object CacheExample extends App {
 
   val spark:SparkSession = SparkSession.builder()
     .master("local[1]")
-    .appName("SparkByExamples.com")
+    .appName("CacheExample")
     .getOrCreate()
-
+  spark.sparkContext.setLogLevel("WARN")
   //read csv with options
   val df = spark.read.options(Map("inferSchema"->"true","delimiter"->",","header"->"true"))
     .csv("src/main/resources/zipcodes.csv")
+  df.createOrReplaceTempView("zipcodes")
+  val df1 = spark.sql("select Zipcode from zipcodes")
+  df1.show()
 
   val df2 = df.where(col("State") === "PR").cache()
   df2.show(false)
@@ -20,7 +23,5 @@ object CacheExample extends App {
 
   val df3 = df2.where(col("Zipcode") === 704)
 
-
   println(df2.count())
-
 }

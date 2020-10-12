@@ -1,16 +1,16 @@
 package com.sparkbyexamples.spark.dataframe.examples
 
-import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.types.{IntegerType, StringType, StructType}
+import org.apache.spark.sql.{Row, SparkSession}
 
-object CollectExample extends App {
-
+object CollectExampleMy extends App {
   val spark: SparkSession = SparkSession.builder()
     .master("local[1]")
     .appName("SparkByExamples.com")
     .getOrCreate()
   spark.sparkContext.setLogLevel("WARN")
 
+  // 嵌套
   val data = Seq(Row(Row("James ", "", "Smith"), "36636", "M", 3000),
     Row(Row("Michael ", "Rose", ""), "40288", "M", 4000),
     Row(Row("Robert ", "", "Williams"), "42114", "M", 4000),
@@ -31,14 +31,15 @@ object CollectExample extends App {
   df.printSchema()
   df.show(false)
 
-  val colList = df.collectAsList()
+  val colList = df.collectAsList() // java的List
   val colData = df.collect()
 
   colData.foreach(row => {
+    val firstname = row.getAs[Row]("name").getAs[String]("firstname")
     val salary = row.getInt(3) //Index starts from zero
-    println(salary)
+    println(s"firstname=$firstname, salary=$salary")
   })
-
+  println
   //Retrieving data from Struct column
   colData.foreach(row => {
     val salary = row.getInt(3)
@@ -48,5 +49,6 @@ object CollectExample extends App {
     val lastName = fullName.getAs[String]("lastname")
     println(firstName + "," + middleName + "," + lastName + "," + salary)
   })
-
 }
+
+
