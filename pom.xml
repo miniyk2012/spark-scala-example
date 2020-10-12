@@ -12,7 +12,10 @@
     <properties>
         <scala.version>2.11.11</scala.version>
         <spark.version>2.4.4</spark.version>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
+
 
     <repositories>
         <repository>
@@ -77,7 +80,7 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>src/main/scala</sourceDirectory>
+<!--        <sourceDirectory>src/main/scala</sourceDirectory>-->
         <resources><resource><directory>src/main/resources</directory></resource></resources>
         <plugins>
             <plugin>

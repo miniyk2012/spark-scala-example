@@ -8,6 +8,7 @@ object ArrayToColumn extends App {
   val spark = SparkSession.builder().appName("SparkByExamples.com")
     .master("local[1]")
     .getOrCreate()
+  spark.sparkContext.setLogLevel("WARN")
 
   val arrayData = Seq(
     Row("James",List("Java","Scala","C++")),
@@ -43,8 +44,18 @@ object ArrayToColumn extends App {
   df.show()
 
   val df2 = df.select(
-    df("name") +: (0 until 2).map(i => df("subjects")(i).alias(s"LanguagesKnown$i")): _*
+    (df("name") +: (0 until 2).map(i => df("subjects")(i).alias(s"LanguagesKnown$i"))): _*
   )
 
   df2.show(false)
+
+  println
+  // 也可以直接用sql的表来做, 功能是一样的
+  df.createOrReplaceTempView("table1")
+  val df3 = spark.sql(
+    """
+      |select name, subjects[0] LanguagesKnown0, subjects[1] LanguagesKnown1 from table1
+      |""".stripMargin)
+  df3.show(truncate = false)
+
 }
