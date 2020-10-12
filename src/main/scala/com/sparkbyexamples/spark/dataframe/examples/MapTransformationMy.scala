@@ -36,7 +36,8 @@ object MapTransformationMy {
 
     val util = new Util()
     val df3 = df2.map(row=>{
-      // 这里需要把util序列化到各个executor中, 因此比较费cpu和io
+      // 这里需要把util序列化从driver发到各个executor中, 因此比较费cpu和io. 当然也可以在map里新建
+      // 每行row都新建一个, 也同样耗资源
       val fullName = util.combine(row.getString(0),row.getString(1),row.getString(2))
       (fullName, row.getString(3), row.getInt(5))
     })
@@ -52,7 +53,7 @@ object MapTransformationMy {
       })
       res
     })
-    val df4Part = df3.toDF("fullName", "id", "salary")
+    val df4Part = df4.toDF("fullName", "id", "salary")
     df4Part.printSchema()
     df4Part.show(false)
   }
