@@ -7,16 +7,18 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.util.AccumulatorV2;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
 public class CustomAccumulatorDemo {
+
     public static class BigIntegerAccumulator extends AccumulatorV2<BigInteger, BigInteger> {
         private BigInteger num = BigInteger.ZERO;
+
         public BigIntegerAccumulator() {
         }
+
         public BigIntegerAccumulator(BigInteger num) {
             this.num = new BigInteger(num.toString());
         }
