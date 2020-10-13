@@ -6,7 +6,7 @@ import org.apache.spark.sql.SparkSession;
 public class SparkContextProvider {
     private static SparkSession spark;
     private static SparkContext sc;
-    private static String appName;
+    private static String appName="AppName";
 
     private SparkContextProvider() {
         initSpark();
@@ -19,8 +19,10 @@ public class SparkContextProvider {
         SparkContextProvider.appName = appName;
     }
     private static void initSpark() {
-        appName = "SparkName";
-        spark = SparkSession.builder().appName(appName).master("local[*]").getOrCreate();
+        spark = SparkSession.builder().appName(appName).master("local[*]")
+                .config("spark.eventLog.dir", "file:///Users/admin/data/spark/spark-logs")
+                .config("spark.eventLog.enabled", "true")
+                .getOrCreate();
         sc = spark.sparkContext();
         sc.setLogLevel("WARN");
     }
