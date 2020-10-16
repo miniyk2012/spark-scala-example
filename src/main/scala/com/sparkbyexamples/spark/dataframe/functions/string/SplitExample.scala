@@ -2,7 +2,6 @@ package com.sparkbyexamples.spark.dataframe.functions.string
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{ArrayType, DataType, DataTypes}
 
 object SplitExample extends App{
 
@@ -10,9 +9,10 @@ object SplitExample extends App{
     .appName("SparkByExamples.com")
     .master("local")
     .getOrCreate()
+  spark.sparkContext.setLogLevel("WARN")
 
   val data = Seq(("James, A, Smith","2018","M",3000),
-    ("Michael, Rose, Jones","2010","M",4000),
+    ("Michael, Rose","2010","M",4000),
     ("Robert,K,Williams","2010","M",4000),
     ("Maria,Anne,Jones","2005","F",4000),
     ("Jen,Mary,Brown","2010","",-1)
@@ -45,8 +45,12 @@ object SplitExample extends App{
     .show(false)
 
 
+  df.createOrReplaceTempView("PERSON")
+  spark.sql("select 'sql split' as FirstRow, SPLIT(name,',')[0] as FirstName, SPLIT(name,',')[1] as MiddleName, SPLIT(name,',')[2] as LastName from PERSON")
+    .show(false)
+
   val splitDF2 = df.withColumn("FirstName",split(col("name"),",").getItem(0))
-    .withColumn("MiddleName",array_join(slice(split(col("name"),","),2,3),"/"))
+    .withColumn("MiddleName",array_join(slice(split(col("name"),","),1,3),"/"))  // 下标从1开始
 
     .withColumn("NameArray",split(col("name"),","))
     .drop("name")
